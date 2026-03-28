@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva: Proyecto Landing Page Administrativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Warm Neutrals with Blue/Teal Accents (bg-slate-50, text-slate-800, blue-600 for primary actions, teal-500 for success/progress) -->
+    <!-- Application Structure Plan: The SPA is structured as an interactive "Mission Control" dashboard. Instead of a linear document, it presents the project phases sequentially: Overview -> Challenge Selection -> Tool Analysis -> Prompt Generation -> Architecture -> Evaluation. This logical flow matches a student's mental model when starting a project: "What is it?", "What do I choose?", "How do I build it?", "How is it graded?". Interactive elements (selectors, generators, checklists) transform passive reading into active project planning. -->
+    <!-- Visualization & Content Choices: 
+         1. Tools Data -> Inform/Compare -> Bar Chart (Chart.js) -> Hover tooltips show details -> Visualizes "Ease of Use" for quick decision making. NO SVG.
+         2. Challenge Selection -> Organize -> Grid of Interactive Cards -> Clicking updates state -> Allows users to focus on one specific domain. NO SVG.
+         3. Prompt Generator -> Apply -> Dynamic Text Area -> Updates based on selections -> Bridges theory (the guide) with execution (getting the prompt). NO SVG.
+         4. Architecture Flow -> Explain -> CSS/HTML styled boxes -> Visualizes the "No DB" form requirement clearly. NO SVG.
+         5. Evaluation -> Track -> Interactive Checklist with Canvas Progress Bar -> Clicking boxes updates progress -> Gamifies the requirements. NO SVG. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 font-bold text-xl text-blue-700 tracking-tight">
+                    🚀 AdminProyect
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Inicio</a>
+                    <a href="#herramientas" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Herramientas</a>
+                    <a href="#prompts" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Prompts</a>
+                    <a href="#requisitos" class="text-slate-600 hover:text-blue-600 font-medium transition-colors">Evaluación</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="inicio" class="bg-blue-700 text-white py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">Tu Proyecto Final:<br>Landing Page Administrativa</h1>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">Bienvenido a tu centro de comando. Aquí transformarás un problema administrativo de una Pyme en una solución tecnológica funcional usando herramientas de vanguardia 2025-2026.</p>
+            <a href="#retos" class="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full hover:bg-blue-50 transition-colors shadow-lg">Comenzar Misión</a>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 space-y-24">
+
+        <section id="retos" class="scroll-mt-20">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Paso 1: Elige tu Reto Administrativo</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto">Cada aprendiz debe seleccionar un proceso único dentro de la Pyme. Selecciona una de las áreas a continuación para enfocar tu proyecto. Esta selección personalizará las herramientas y prompts más adelante.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="challenge-grid">
+            </div>
+        </section>
+
+        <section id="herramientas" class="scroll-mt-20 bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Paso 2: Analiza las Herramientas (2025-2026)</h2>
+                <p class="text-slate-600">Para lograr este proyecto sin requerir conocimientos profundos de programación, dispones de varias opciones No-Code y Vibecoding. La siguiente gráfica compara el nivel de facilidad de uso de cada herramienta recomendada para que tomes la mejor decisión según tu estilo.</p>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="toolsChart"></canvas>
+            </div>
+        </section>
+
+        <section id="arquitectura" class="scroll-mt-20">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Paso 3: Arquitectura Técnica (Sin Base de Datos)</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto">Para mantener la simplicidad y cumplir los requisitos, tu Landing Page no usará una base de datos propia. Toda la recolección de datos debe redirigirse a un formulario externo de forma transparente para el usuario.</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-2xl flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
+                <div class="bg-blue-50 border-2 border-blue-200 p-6 rounded-xl text-center w-full md:w-1/3">
+                    <div class="text-4xl mb-2">🌐</div>
+                    <h3 class="font-bold text-blue-800 mb-2">Tu Landing Page</h3>
+                    <p class="text-sm text-slate-600">Presenta el problema, la solución y convence al usuario.</p>
+                </div>
+                
+                <div class="text-4xl text-slate-300 hidden md:block">➔</div>
+                <div class="text-4xl text-slate-300 md:hidden block">⬇</div>
+
+                <div class="bg-amber-50 border-2 border-amber-200 p-6 rounded-xl text-center w-full md:w-1/3 shadow-md relative transform hover:-translate-y-1 transition-transform cursor-help" title="Atributo href del botón">
+                    <div class="text-4xl mb-2">🖱️</div>
+                    <h3 class="font-bold text-amber-800 mb-2">Botón CTA</h3>
+                    <p class="text-sm text-slate-600">"Registrarse aquí", "Agendar Cita", etc.</p>
+                </div>
+
+                <div class="text-4xl text-slate-300 hidden md:block">➔</div>
+                <div class="text-4xl text-slate-300 md:hidden block">⬇</div>
+
+                <div class="bg-emerald-50 border-2 border-emerald-200 p-6 rounded-xl text-center w-full md:w-1/3">
+                    <div class="text-4xl mb-2">📝</div>
+                    <h3 class="font-bold text-emerald-800 mb-2">Google/MS Forms</h3>
+                    <p class="text-sm text-slate-600">Recibe y almacena la información de forma segura.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="prompts" class="scroll-mt-20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Paso 4: Generador de Prompts Maestro</h2>
+                <p class="text-slate-600">Si has decidido utilizar Inteligencia Artificial (Vibecoding o Generadores), un buen "Prompt" es el secreto del éxito. Selecciona la tecnología que vas a usar y copia el prompt optimizado para tu reto específico.</p>
+            </div>
+
+            <div class="glass-card rounded-2xl overflow-hidden border border-blue-100">
+                <div class="bg-blue-50 p-6 border-b border-blue-100 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <div>
+                        <span class="text-sm font-semibold text-blue-800 uppercase tracking-wider block mb-1">Reto Actual:</span>
+                        <span id="current-challenge-display" class="text-xl font-bold text-slate-800">Selecciona un reto arriba</span>
+                    </div>
+                    <div class="flex bg-white rounded-lg p-1 shadow-sm border border-slate-200">
+                        <button id="btn-vibecoding" class="px-4 py-2 rounded-md bg-blue-600 text-white font-medium transition-colors text-sm">Vibecoding (Gemini)</button>
+                        <button id="btn-nocode" class="px-4 py-2 rounded-md text-slate-600 hover:bg-slate-50 font-medium transition-colors text-sm">IA Contenido (Gamma)</button>
+                    </div>
+                </div>
+                <div class="p-6 bg-slate-800 relative group">
+                    <button id="btn-copy" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white border border-white/30 px-3 py-1.5 rounded text-sm transition-colors opacity-0 group-hover:opacity-100">Copiar Prompt</button>
+                    <p id="prompt-output" class="text-green-400 font-mono text-sm sm:text-base leading-relaxed whitespace-pre-wrap min-h-[150px]">Por favor, selecciona un reto en el Paso 1 para generar tu prompt personalizado.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="requisitos" class="scroll-mt-20 bg-white p-8 rounded-2xl shadow-sm border border-slate-100 mb-20">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Paso 5: Evaluación y Entrega</h2>
+                <p class="text-slate-600">Antes de subir tu archivo a Google Classroom, asegúrate de cumplir con todos los requisitos exigidos por el instructor. Usa este checklist interactivo para verificar tu progreso.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-12">
+                <div class="flex-1 space-y-4" id="checklist-container">
+                </div>
+                
+                <div class="w-full md:w-64 flex flex-col items-center justify-center bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <h3 class="font-bold text-slate-700 mb-4 text-center">Progreso del Proyecto</h3>
+                    <div class="relative w-40 h-40">
+                        <canvas id="progressCanvas" width="160" height="160"></canvas>
+                        <div class="absolute inset-0 flex items-center justify-center flex-col">
+                            <span id="progress-text" class="text-3xl font-bold text-teal-600">0%</span>
+                            <span class="text-xs text-slate-500 font-medium uppercase mt-1">Completado</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 text-center">
+                        <p class="text-sm font-bold text-slate-800 mb-2">Instrucciones Finales:</p>
+                        <p class="text-xs text-slate-600">Sube el archivo `.html` o el enlace público a Google Classroom. Prepárate para sustentar tu solución ante el equipo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 text-center border-t border-slate-800">
+        <p class="max-w-2xl mx-auto px-4">Esta es una herramienta interactiva diseñada para asistir a los aprendices en el módulo "Aplicar Tecnologías de la Información".</p>
+        <p class="mt-2 text-sm">© 2025-2026 Gestión Administrativa Pyme</p>
+    </footer>
+
+    <script>
+        const appState = {
+            selectedChallengeId: null,
+            selectedPromptType: 'vibecoding',
+            challenges: [
+                { id: 'hr', title: 'Talento Humano', desc: 'Página de inducción para nuevos empleados.', icon: '👥' },
+                { id: 'docs', title: 'Gestión Documental', desc: 'Portal para consulta de manuales de procesos.', icon: '📁' },
+                { id: 'pqrs', title: 'Servicio al Cliente', desc: 'Landing para recepción de PQRS.', icon: '💬' },
+                { id: 'providers', title: 'Compras', desc: 'Página para registro de nuevos proveedores.', icon: '🛒' },
+                { id: 'sst', title: 'Salud y Seguridad', desc: 'Portal para reporte de incidentes en el trabajo.', icon: '⛑️' }
+            ],
+            tools: [
+                { name: 'Gemini/Claude', type: 'Vibecoding', ease: 3, ideal: 'Código completo (HTML/JS) personalizado.' },
+                { name: 'Gamma.app', type: 'IA Generativa', ease: 4, ideal: 'Landings visualmente impactantes rápido.' },
+                { name: 'Vix/Wix Studio', type: 'No-Code', ease: 2, ideal: 'Control visual arrastrando elementos.' },
+                { name: 'Carrd.co', type: 'No-Code', ease: 3, ideal: 'Landings sencillas y elegantes.' },
+                { name: 'Google Sites', type: 'No-Code', ease: 4, ideal: 'Integración perfecta con Google.' }
+            ],
+            checklist: [
+                { id: 'chk1', text: 'Identidad: Título claro que describe la mejora administrativa.' },
+                { id: 'chk2', text: 'Funcionalidad: El botón principal abre el formulario externo (Google/MS Forms).' },
+                { id: 'chk3', text: 'Diseño: Uso de colores coherentes y diseño limpio.' },
+                { id: 'chk4', text: 'Contenido: Texto sin errores que explica la propuesta de valor.' },
+                { id: 'chk5', text: 'Responsividad: La página se adapta correctamente a celulares.' }
+            ]
+        };
+
+        function initApp() {
+            renderChallenges();
+            renderChart();
+            renderChecklist();
+            setupPromptListeners();
+            updateProgressCanvas(0);
+        }
+
+        function renderChallenges() {
+            const grid = document.getElementById('challenge-grid');
+            grid.innerHTML = '';
+            
+            appState.challenges.forEach(challenge => {
+                const card = document.createElement('div');
+                card.className = 'glass-card p-6 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-2 border-transparent';
+                card.onclick = () => selectChallenge(challenge.id, card);
+                
+                card.innerHTML = `
+                    <div class="text-4xl mb-4">${challenge.icon}</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">${challenge.title}</h3>
+                    <p class="text-slate-600 text-sm">${challenge.desc}</p>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectChallenge(id, cardElement) {
+            appState.selectedChallengeId = id;
+            
+            const cards = document.querySelectorAll('#challenge-grid > div');
+            cards.forEach(c => {
+                c.classList.remove('border-blue-500', 'bg-blue-50/50');
+                c.classList.add('border-transparent');
+            });
+            
+            cardElement.classList.remove('border-transparent');
+            cardElement.classList.add('border-blue-500', 'bg-blue-50/50');
+            
+            const selected = appState.challenges.find(c => c.id === id);
+            document.getElementById('current-challenge-display').textContent = selected.title;
+            
+            updatePromptDisplay();
+            
+            document.getElementById('prompts').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('toolsChart').getContext('2d');
+            
+            const labels = appState.tools.map(t => t.name);
+            const dataValues = appState.tools.map(t => t.ease);
+            const tooltips = appState.tools.map(t => t.ideal);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nivel de Facilidad (1-4)',
+                        data: dataValues,
+                        backgroundColor: 'rgba(37, 99, 235, 0.7)',
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Facilidad: ' + context.raw;
+                                },
+                                afterLabel: function(context) {
+                                    return 'Uso: ' + tooltips[context.dataIndex];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: function(value) {
+                                    if(value === 1) return 'Baja';
+                                    if(value === 2) return 'Media';
+                                    if(value === 3) return 'Alta';
+                                    if(value === 4) return 'Muy Alta';
+                                    return '';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setupPromptListeners() {
+            const btnVibe = document.getElementById('btn-vibecoding');
+            const btnNoCode = document.getElementById('btn-nocode');
+            const btnCopy = document.getElementById('btn-copy');
+
+            btnVibe.onclick = () => {
+                appState.selectedPromptType = 'vibecoding';
+                btnVibe.classList.replace('text-slate-600', 'text-white');
+                btnVibe.classList.replace('hover:bg-slate-50', 'bg-blue-600');
+                
+                btnNoCode.classList.replace('text-white', 'text-slate-600');
+                btnNoCode.classList.replace('bg-blue-600', 'hover:bg-slate-50');
+                updatePromptDisplay();
+            };
+
+            btnNoCode.onclick = () => {
+                appState.selectedPromptType = 'nocode';
+                btnNoCode.classList.replace('text-slate-600', 'text-white');
+                btnNoCode.classList.replace('hover:bg-slate-50', 'bg-blue-600');
+                
+                btnVibe.classList.replace('text-white', 'text-slate-600');
+                btnVibe.classList.replace('bg-blue-600', 'hover:bg-slate-50');
+                updatePromptDisplay();
+            };
+
+            btnCopy.onclick = () => {
+                const text = document.getElementById('prompt-output').textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = btnCopy.textContent;
+                    btnCopy.textContent = '¡Copiado!';
+                    btnCopy.classList.add('bg-green-500', 'border-green-500');
+                    setTimeout(() => {
+                        btnCopy.textContent = originalText;
+                        btnCopy.classList.remove('bg-green-500', 'border-green-500');
+                    }, 2000);
+                });
+            };
+        }
+
+        function updatePromptDisplay() {
+            const output = document.getElementById('prompt-output');
+            
+            if (!appState.selectedChallengeId) {
+                output.textContent = "Por favor, selecciona un reto en el Paso 1 para generar tu prompt personalizado.";
+                return;
+            }
+
+            const challenge = appState.challenges.find(c => c.id === appState.selectedChallengeId);
+            let promptText = "";
+
+            if (appState.selectedPromptType === 'vibecoding') {
+                promptText = `Actúa como un Desarrollador Web Senior y Consultor Administrativo. Necesito que generes el código completo en un solo archivo HTML para una Landing Page de una Pyme enfocada en ${challenge.title}. El objetivo principal es: ${challenge.desc}.
+
+Requisitos técnicos:
+1. Usa Tailwind CSS (vía CDN) para un diseño moderno, limpio y profesional (colores azul marino, blanco y gris suave).
+2. Estructura: Encabezado con logo simulado, Sección Hero con un título impactante que evidencie la mejora administrativa, Sección de 'Cómo funciona', y Sección de Beneficios.
+3. Botón Principal (CTA): Crea un botón grande y llamativo que diga 'Ingresar al Formulario' y que tenga un atributo href vacío (href="#") para yo poner luego el link de mi Google Forms.
+4. La página debe ser totalmente responsiva (móvil y escritorio) y usar una fuente moderna de Google Fonts.
+5. Agrega un pie de página con información de contacto ficticia.
+6. NO generes css ni js en archivos separados, todo debe ir en el archivo HTML.`;
+            } else {
+                promptText = `Genera una estructura de contenido y diseño visual para una Landing Page profesional sobre ${challenge.title}. El objetivo es ${challenge.desc.toLowerCase()}. 
+
+La página debe tener un tono corporativo pero amigable y directo. 
+
+Incluye:
+- Un título principal (Hero) atractivo.
+- Un párrafo explicando el problema administrativo actual.
+- Una sección de 3 beneficios de usar este nuevo portal.
+- Un llamado a la acción (botón) destacado que dirija a un formulario externo.
+- Estilo visual sugerido: minimalista, con mucho espacio en blanco, esquinas redondeadas e iconos sencillos.`;
+            }
+
+            output.textContent = promptText;
+            output.classList.add('fade-in');
+            setTimeout(() => output.classList.remove('fade-in'), 500);
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-container');
+            container.innerHTML = '';
+
+            appState.checklist.forEach(item => {
+                const label = document.createElement('label');
+                label.className = 'flex items-start space-x-3 p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors group';
+                
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.className = 'mt-1 w-5 h-5 text-teal-600 rounded border-slate-300 focus:ring-teal-500';
+                input.onchange = calculateProgress;
+
+                const span = document.createElement('span');
+                span.className = 'text-slate-700 group-hover:text-slate-900 transition-colors';
+                span.textContent = item.text;
+
+                label.appendChild(input);
+                label.appendChild(span);
+                container.appendChild(label);
+            });
+        }
+
+        function calculateProgress() {
+            const checkboxes = document.querySelectorAll('#checklist-container input[type="checkbox"]');
+            let checked = 0;
+            checkboxes.forEach(box => {
+                if (box.checked) checked++;
+            });
+            
+            const percentage = Math.round((checked / checkboxes.length) * 100);
+            document.getElementById('progress-text').textContent = percentage + '%';
+            updateProgressCanvas(percentage);
+        }
+
+        function updateProgressCanvas(percentage) {
+            const canvas = document.getElementById('progressCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 70;
+            const startAngle = -0.5 * Math.PI;
+            const endAngle = startAngle + (percentage / 100) * 2 * Math.PI;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.lineWidth = 12;
+            ctx.strokeStyle = '#e2e8f0'; 
+            ctx.stroke();
+
+            if (percentage > 0) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                ctx.lineWidth = 12;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#0d9488'; 
+                ctx.stroke();
+            }
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
